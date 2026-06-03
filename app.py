@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Flask DevSecOps"
+    return "Belajar Flask DevSecOps"
 
 
 if __name__ == "__main__":
