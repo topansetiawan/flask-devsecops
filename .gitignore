@@ -8,11 +8,7 @@ venv/
 # Ignore Docker stuff
 *.log
 *.pid
-
-# ignore zip file
 *.zip
-
-# optional tambahan (best practice DevOps)
 *.tar
 *.gz
 *.rar
