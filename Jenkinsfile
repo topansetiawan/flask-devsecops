@@ -5,15 +5,33 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Skip git dulu (lokal project)'
+                echo 'Checkout dari GitHub otomatis oleh Jenkins'
+                checkout scm
             }
         }
 
-        stage('Install') {
+        stage('Setup Environment') {
             steps {
                 sh '''
                 python3 --version
-                python3 -m pip install flask pytest
+
+                # buat virtual environment
+                python3 -m venv venv
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                # aktifkan venv
+                . venv/bin/activate
+
+                # upgrade pip
+                pip install --upgrade pip
+
+                # install dependency
+                pip install flask pytest
                 '''
             }
         }
@@ -21,9 +39,23 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
-                pytest || true
+                . venv/bin/activate
+                pytest -v
                 '''
             }
+        }
+
+    }
+
+    post {
+        always {
+            echo 'Pipeline selesai (success / fail tetap masuk sini)'
+        }
+        success {
+            echo 'Build berhasil ✅'
+        }
+        failure {
+            echo 'Build gagal ❌'
         }
     }
 }
